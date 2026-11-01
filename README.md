@@ -2,7 +2,6 @@
 
 **PolaSTFlow: Physics-Aware One-Step Generation for Dual-Polarization Radar Echo Extrapolation**
 
-Official PyTorch implementation of **PolaSTFlow**, a physics-aware one-step generative framework for dual-polarization radar echo extrapolation.
 
 ## Overview
 
