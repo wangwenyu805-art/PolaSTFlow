@@ -1,0 +1,6 @@
+# Runtime requirements (also declared in pyproject.toml).
+# For automated tests: pip install -e ".[dev]"
+torch>=2.4
+numpy>=1.23
+PyYAML>=6
+tqdm>=4.60
