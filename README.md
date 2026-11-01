@@ -1,13 +1,10 @@
 # PolaSTFlow
 
-**PolaSTFlow: Physics-Aware One-Step Generation for Dual-Polarization Radar Echo Extrapolation**
+PyTorch implementation of **PolaSTFlow: Physics-Aware One-Step Generation for Dual-Polarization Radar Echo Extrapolation**.
 
+The manuscript is currently under review at *IEEE Transactions on Geoscience and Remote Sensing (TGRS)*. This repository provides the implementation for peer-review purposes.
 
-## Overview
-
-PolaSTFlow jointly predicts future horizontal reflectivity (ZH) and differential reflectivity (ZDR) sequences from historical radar observations. The framework incorporates physics-aware spatiotemporal modeling into one-step generation to support accurate and efficient radar echo extrapolation.
-
-## Installation
+## Requirements
 
 Python 3.10 or later is required.
 
@@ -19,7 +16,11 @@ pip install -e .
 
 ## Data Preparation
 
-Organize the dataset as follows:
+The model uses historical ZH and ZDR radar sequences to predict future radar observations.
+
+Each `.npy` file has the shape `[2, 10, 256, 256]`, corresponding to `[C, T, H, W]`.
+
+Organize the data as follows:
 
 ```text
 dataset/
@@ -33,13 +34,11 @@ dataset/
     └── input/
 ```
 
-Each `.npy` file contains two channels `[ZH, ZDR]` with shape `[2, 10, 256, 256]`, corresponding to `[C, T, H, W]`.
-
-Training and validation require paired input and output files with matching sample identifiers.
+Training and validation require paired input and output files with matching sample identifiers. The dataset is not included in this repository.
 
 ## Training
 
-**Single-GPU training:**
+Single-GPU training:
 
 ```bash
 python scripts/train.py \
@@ -52,7 +51,7 @@ python scripts/train.py \
   --lr 1e-4
 ```
 
-**Multi-GPU training (DDP):**
+Multi-GPU training:
 
 ```bash
 torchrun --standalone --nproc_per_node=2 scripts/train.py \
@@ -65,25 +64,7 @@ torchrun --standalone --nproc_per_node=2 scripts/train.py \
   --lr 1e-4
 ```
 
-The training process saves two checkpoints:
-
-- `best.pth`: Best checkpoint selected by validation loss.
-- `last.pth`: Latest checkpoint for resuming training.
-
-**Resume training:**
-
-```bash
-python scripts/train.py \
-  --train-data dataset/train \
-  --val-data dataset/val \
-  --output-dir runs/default \
-  --device cuda \
-  --resume runs/default/last.pth
-```
-
 ## Prediction
-
-Generate future radar sequences using a trained checkpoint:
 
 ```bash
 python scripts/predict.py \
@@ -93,14 +74,6 @@ python scripts/predict.py \
   --device cuda
 ```
 
-Predictions are saved as `.npy` files. Ground-truth future frames are not required during inference.
-
-## Citation
-
-If you find PolaSTFlow useful in your research, please consider citing our paper.
-
-The citation information will be updated upon publication.
-
 ## Acknowledgements
 
-This work builds upon [Pixel MeanFlow (pMF)](https://github.com/Lyy-iiis/pMF). We thank the original authors for their contributions.
+This implementation builds upon [Pixel MeanFlow (pMF)](https://github.com/Lyy-iiis/pMF).
